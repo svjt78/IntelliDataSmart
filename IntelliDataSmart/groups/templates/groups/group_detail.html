@@ -1,0 +1,55 @@
+{% extends "groups/group_base.html" %}
+
+{% block pregroup %}
+
+
+<h1>{{group_details.name}}</h1>
+<h3>{{group_details.description}}</h3>
+<h2>Purpose: {{group_details.purpose}}</h2>
+<h2>Member Count: {{group_details.member_set.count}}</h2>
+
+<div class="content">
+
+  <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Add Members</a>
+  &nbsp;
+  <a href="{% url 'groups:update' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Group</a>
+  &nbsp;
+  <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
+  &nbsp;
+  <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
+
+</div>
+
+<!--
+<div class="content">
+
+
+				{% if user in group.members.all %}
+					<a href="{% url 'groups:leave' slug=group_details.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Leave</a>
+				{% else %}
+					<a href="{% url 'groups:join' slug=group_details.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Join</a>
+				{% endif %}
+
+
+
+</div>
+
+-->
+{% endblock %}
+
+
+<!--{% block group_content %}
+
+<div class="col-md-8">
+	{% if group.posts.count == 0 %}
+	<h2>No posts in this group yet!</h2>
+
+	{% else %}
+
+		{% for post in group.posts.all %}
+			{% include "posts/_post.html" %}
+		{% endfor %}
+
+	{% endif %}
+</div>
+{% endblock %}-->
