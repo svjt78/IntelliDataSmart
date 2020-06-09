@@ -11,10 +11,16 @@
 		</h2>
 
     {% endif %}
-			<h2>Groups</h2>
+		<h2>Groups</h2>
 
-			<p>Welcome to the Groups Page! Select a Group that you want to work with!</p>
+		{% if not object_list %}
+  			<p>No groups available at this time! Go ahead and create a group if needed!</p>
+		{% else %}
+				<p>Welcome to the Groups Page! Select a group that you want to work with!</p>
+		{% endif %}
+
 	</div>
+	
 	{% if user.is_authenticated %}
 	<a href="{% url 'groups:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Group!</a>
 	{% endif %}

@@ -10,11 +10,17 @@
 		</h2>
 
     {% endif %}
-			<h2>Members</h2>
+		<h2>Members</h2>
 
-			<p>Welcome to the Members Page! Select a Member that you want to work on!</p>
-			<br>
-			<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
+		{% if not object_list %}
+  			<p>No members available at this time! Go back and add a member to this group!</p>
+		{% else %}
+				<p>Welcome to the Members Page! Select a member that you want to work on!</p>
+		{% endif %}
+
+		<br>
+		<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
+
 	</div>
 </div>
 {% endblock %}
