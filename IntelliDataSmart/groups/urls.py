@@ -8,6 +8,7 @@ urlpatterns = [
     url(r"^$", views.ListGroups.as_view(), name="all"),
     url(r"^new/$", views.CreateGroup.as_view(), name="create"),
     url(r"^search/$", views.SearchGroupsForm, name="search"),
+    url(r"^(?P<pk>\d+)/members/show/$", views.ShowMembersList.as_view(), name="show_members"),
     url(r"^search/results/$", views.SearchGroupsList.as_view(), name="search_results"),
     url(r"^posts/in/(?P<pk>\d+)/$",views.SingleGroup.as_view(),name="single"),
     url(r"^update/(?P<pk>\d+)/$",views.UpdateGroup.as_view(),name="update"),

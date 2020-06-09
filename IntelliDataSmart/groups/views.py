@@ -77,16 +77,30 @@ def SearchGroupsForm(request):
     return render(request,'groups/group_search_form.html')
 
 
-class SearchGroupsList(generic.ListView):
+class SearchGroupsList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
     model = Group
     template_name = 'groups/group_search_list.html'
 
     def get_queryset(self, **kwargs): # new
         query = self.request.GET.get('q', None)
         object_list = Group.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query) | Q(purpose__icontains=query)
+            Q(pk__icontains=query) | Q(name__icontains=query) | Q(description__icontains=query) | Q(purpose__icontains=query)
         )
         return object_list
+
+
+class ShowMembersList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    model = Group
+    template_name = 'members/member_list.html'
+
+    def get_queryset(self): # new
+        group = get_object_or_404(models.Group, pk=self.kwargs['pk'])
+        object_list = group.member_set.all()
+
+        return object_list
+
 
 
 class JoinGroup(LoginRequiredMixin, generic.RedirectView):

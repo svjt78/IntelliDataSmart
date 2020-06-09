@@ -2,16 +2,18 @@
 
 {% block premember %}
 
-
 <h1>{{member_details.name}}</h1>
+<h2>{{member_details.pk}}</h2>
 <h2>Age: {{member_details.age}}</h2>
 <h2>Group: {{member_details.group}}</h2>
 
 <div class="content">
 
-  <a href="{% url 'members:update' pk=member_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Member</a>
+  <a href="{% url 'members:update' pk=member_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Member</a>
   &nbsp;
-  <a href="{% url 'members:delete' pk=member_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Member</a>
+  <a href="{% url 'members:delete' pk=member_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Member</a>
+  &nbsp;
+  <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 
 </div>
 

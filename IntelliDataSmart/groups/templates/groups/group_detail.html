@@ -4,17 +4,20 @@
 
 
 <h1>{{group_details.name}}</h1>
+<h2>{{group_details.pk}}</h2>
 <h3>{{group_details.description}}</h3>
 <h2>Purpose: {{group_details.purpose}}</h2>
 <h2>Member Count: {{group_details.member_set.count}}</h2>
 
 <div class="content">
 
-  <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Add Members</a>
+  <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add Members</a>
   &nbsp;
-  <a href="{% url 'groups:update' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Group</a>
+  <a href="{% url 'groups:update' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Group</a>
   &nbsp;
-  <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
+  <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
+  &nbsp;
+  <a href="{% url 'groups:show_members' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Members</a>
   &nbsp;
   <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 

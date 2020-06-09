@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.shortcuts import render
+from django.db.models import Q
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
     PermissionRequiredMixin
@@ -80,3 +82,19 @@ class DeleteMember(LoginRequiredMixin, generic.DeleteView,):
     def delete(self, *args, **kwargs):
         messages.success(self.request, "Member Deleted")
         return super().delete(*args, **kwargs)
+
+def SearchMembersForm(request):
+    return render(request,'members/member_search_form.html')
+
+
+class SearchMembersList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    model = models.Member
+    template_name = 'members/member_search_list.html'
+
+    def get_queryset(self, **kwargs): # new
+        query = self.request.GET.get('q', None)
+        object_list = models.Member.objects.filter(
+            Q(name__icontains=query) | Q(age__icontains=query)
+        )
+        return object_list

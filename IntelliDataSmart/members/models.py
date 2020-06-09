@@ -36,5 +36,5 @@ class Member(models.Model):
 
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["pk"]
         #unique_together = ["name", "group"]

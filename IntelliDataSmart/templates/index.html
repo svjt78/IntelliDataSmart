@@ -27,7 +27,7 @@
 
     <nav class="navbar  mynav" role="navigation" id="navbar">
     			<div class="container">
-            
+
             <a class="navbar-brand mynav" href="{% url 'home' %}">Home</a>
 
             <ul class="nav navbar-nav navbar-right">
@@ -35,6 +35,7 @@
                     <li><a class="navbar-brand mynav" href="{% url 'groups:all' %}" class="btn btn-simple">Groups</a></li>
                     <li><a class="navbar-brand mynav" href="{% url 'members:all' %}" class="btn btn-simple">Members</a></li>
                     <li><a class="navbar-brand mynav" href="{% url 'groups:search' %}" class="btn btn-simple">Search Group</a></li>
+                    <li><a class="navbar-brand mynav" href="{% url 'members:search' %}" class="btn btn-simple">Search Member</a></li>
                     <li><a href="{% url 'Accounts:logout' %}" class="btn btn-simple">Log out</a></li>
               {% else %}
                 <!--    <li><a href="{% url 'accounts:login' %}" class="btn btn-simple">Log in</a></li>

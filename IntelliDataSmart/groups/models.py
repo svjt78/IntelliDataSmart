@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
+from groups.utils import create_new_ref_number
+
 # from accounts.models import User
 
 import misaka
@@ -35,7 +37,7 @@ class Group(models.Model):
         return reverse("groups:single", kwargs={"pk": self.pk})
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["pk"]
         unique_together = ("name", "purpose")
 
 

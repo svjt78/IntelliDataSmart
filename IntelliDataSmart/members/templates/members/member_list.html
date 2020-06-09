@@ -13,6 +13,8 @@
 			<h2>Members</h2>
 
 			<p>Welcome to the Members Page! Select a Member that you want to work on!</p>
+			<br>
+			<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 	</div>
 </div>
 {% endblock %}
@@ -23,6 +25,7 @@
 		{% for member in object_list %}
 		  <a class="list-group-item" href="{% url 'members:single' pk=member.pk %}">
 			     <h3 class="title list-group-item-heading">{{ member.name }}</h3>
+					 <h3 class="title list-group-item-heading">ID: {{ member.pk }}</h3>
 					 <h3 class="title list-group-item-heading">Age: {{ member.age }}</h3>
 					 <h3 class="title list-group-item-heading">Group: {{ member.group }}</h3>
 		</a>
