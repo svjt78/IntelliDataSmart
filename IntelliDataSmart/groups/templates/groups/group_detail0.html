@@ -2,9 +2,7 @@
 
 {% block pregroup %}
 
-<div class="dropdown">
-  <button class="dropbtn btn btn-primary btn-large">Manage Groups</button>
-  <div class="dropdown-content">
+<div class="content">
 
     <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add Members</a>
     &nbsp;
@@ -13,13 +11,10 @@
     <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
     &nbsp;
     <a href="{% url 'groups:show_members' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Members</a>
+    &nbsp;
+    <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 
-  </div>
 </div>
-
-&nbsp;
-<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
-&nbsp;
 
 <h1>{{group_details.name}}</h1>
 <h2>ID: {{group_details.pk}}</h2>

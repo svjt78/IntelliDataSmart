@@ -2,15 +2,21 @@
 
 {% block preproduct %}
 
-<div class="content">
+<div class="dropdown">
+  <button class="dropbtn btn btn-primary btn-large">Manage Products</button>
+  <div class="dropdown-content">
+
 
   <a href="{% url 'products:update' pk=product_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Product</a>
   &nbsp;
   <a href="{% url 'products:delete' pk=product_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Product</a>
-  &nbsp;
-  <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 
+  </div>
 </div>
+
+&nbsp;
+<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
+&nbsp;
 
 <h1>{{product_details.name}}</h1>
 <h2>ID: {{product_details.productid}}</h2>

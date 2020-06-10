@@ -2,18 +2,24 @@
 
 {% block premember %}
 
-<div class="content">
+<div class="dropdown">
+  <button class="dropbtn btn btn-primary btn-large">Manage Members</button>
+  <div class="dropdown-content">
 
   <a href="{% url 'members:update' pk=member_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Member</a>
   &nbsp;
   <a href="{% url 'members:delete' pk=member_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Member</a>
-  &nbsp;
-  <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 
+
+  </div>
 </div>
 
+&nbsp;
+<input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
+&nbsp;
+
 <h1>{{member_details.name}}</h1>
-<h2>{{member_details.pk}}</h2>
+<h2>ID: {{member_details.pk}}</h2>
 <h2>Age: {{member_details.age}}</h2>
 <h2>Group: {{member_details.group}}</h2>
 
