@@ -2,11 +2,6 @@
 
 {% block premember %}
 
-<h1>{{member_details.name}}</h1>
-<h2>{{member_details.pk}}</h2>
-<h2>Age: {{member_details.age}}</h2>
-<h2>Group: {{member_details.group}}</h2>
-
 <div class="content">
 
   <a href="{% url 'members:update' pk=member_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Member</a>
@@ -16,5 +11,10 @@
   <input type="button" class="btn btn-primary btn-large" value="Go back!" onclick="history.back()">
 
 </div>
+
+<h1>{{member_details.name}}</h1>
+<h2>{{member_details.pk}}</h2>
+<h2>Age: {{member_details.age}}</h2>
+<h2>Group: {{member_details.group}}</h2>
 
 {% endblock %}

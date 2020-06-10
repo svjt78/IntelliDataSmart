@@ -23,8 +23,8 @@
   </head>
 
 
-  <body>
-
+  <body data-spy="scroll" data-target=".navbar">
+    <div class="navigation">
     <nav class="navbar  mynav" role="navigation" id="navbar">
     			<div class="container">
 
@@ -34,8 +34,10 @@
               {% if user.is_authenticated %}
                     <li><a class="navbar-brand mynav" href="{% url 'groups:all' %}" class="btn btn-simple">Groups</a></li>
                     <li><a class="navbar-brand mynav" href="{% url 'members:all' %}" class="btn btn-simple">Members</a></li>
+                    <li><a class="navbar-brand mynav" href="{% url 'products:all' %}" class="btn btn-simple">Products</a></li>
                     <li><a class="navbar-brand mynav" href="{% url 'groups:search' %}" class="btn btn-simple">Search Group</a></li>
                     <li><a class="navbar-brand mynav" href="{% url 'members:search' %}" class="btn btn-simple">Search Member</a></li>
+                    <li><a class="navbar-brand mynav" href="{% url 'products:search' %}" class="btn btn-simple">Search Product</a></li>
                     <li><a href="{% url 'Accounts:logout' %}" class="btn btn-simple">Log out</a></li>
               {% else %}
                 <!--    <li><a href="{% url 'accounts:login' %}" class="btn btn-simple">Log in</a></li>
@@ -49,6 +51,7 @@
 
     			</div>
     		</nav>
+      </div>
 
         <div class="container mycontent">
 
