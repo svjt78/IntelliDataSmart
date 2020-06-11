@@ -1,4 +1,4 @@
-"""final_social_clone URL Configuration
+"""IntelliDataSmart URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r"^members/", include("members.urls", namespace="members")),
     url(r"^groups/",include("groups.urls", namespace="groups")),
     url(r"^products/",include("products.urls", namespace="products")),
+    url(r"^agreements/",include("agreements.urls", namespace="agreements")),
 ]

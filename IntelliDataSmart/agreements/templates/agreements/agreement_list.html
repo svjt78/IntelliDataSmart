@@ -1,0 +1,58 @@
+{% extends "agreements/agreement_base.html" %}
+
+{% block pre_agreement %}
+<div class="col-md-4">
+	<div class="content">
+		{% if user.is_authenticated %}
+		<h2>
+			Welcome
+			{{user.username }}
+
+		</h2>
+
+    {% endif %}
+		<h2>Agreements</h2>
+
+		{% if not object_list %}
+  			<p>No agreements available at this time! Go ahead and create an agreement if needed!</p>
+		{% else %}
+				<p>Welcome to the Agreements Page! Select a agreement that you want to work with!</p>
+		{% endif %}
+
+	</div>
+
+	{% if user.is_authenticated %}
+	<a href="{% url 'agreements:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Agreement!</a>
+	{% endif %}
+</div>
+
+<br>
+
+{% endblock %}
+
+
+
+{% block agreement_content %}
+<div class="col-md-8">
+	<div class="list-group">
+		{% for agreement in object_list %}
+			<a class="list-group-item" href="{% url 'agreements:single' pk=agreement.pk %}">
+			     <h3 class="title list-group-item-heading">{{ agreement.name }}</h3>
+					 <h3 class="title list-group-item-heading">ID: {{ agreement.pk }}</h3>
+					 <h3 class="title list-group-item-heading">Group: {{ agreement.group }}</h3>
+					 <h3 class="title list-group-item-heading">Product: {{ agreement.product }}</h3>
+			<div class="list-group-item-text container-fluid">
+
+				<div class="row">
+					<div class="col-md-4">
+						<span class="badge">{{ agreement.contract_set.count }}</span> contract{{ agreement.contract_set.count|pluralize }}
+					</div>
+				</div>
+				<br>
+					<h4> {{ agreement.description_html|safe }} </h4>
+			</div>
+		</a>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

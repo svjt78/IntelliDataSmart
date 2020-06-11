@@ -1,7 +1,13 @@
 from django.conf import settings
+from datetime import datetime
+from pytz import timezone
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
+from groups.utils import create_new_ref_number
+from groups.models import Group
+from products.models import Product
+# from accounts.models import User
 
 import misaka
 
@@ -13,31 +19,17 @@ User = get_user_model()
 from django import template
 register = template.Library()
 
-class Product(models.Model):
-    productid = models.PositiveIntegerField()
+
+
+class Agreement(models.Model):
     name = models.CharField(max_length=255)
-
-    CHOOSE = 'Unknown Type'
-    LIFE = 'LIFE'
-    STD = 'STD'
-    LTD = 'LTD'
-    CI = 'CI'
-    PRODUCT_CHOICES = (
-        (CHOOSE, 'Unknown Type'),
-        (LIFE, 'Life Insurance'),
-        (STD, 'Short Term Disability'),
-        (LTD, 'Long Term Disability'),
-        (CI, 'Critical Illness'),
-    )
-    type = models.CharField(max_length=100,
-                                      choices=PRODUCT_CHOICES,
-                                      default=CHOOSE)
-
     slug = models.SlugField(allow_unicode=True)
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
-    #coverage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    price_per_1000_units = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    coverage_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    agreement_date = models.DateTimeField(auto_now=True)
+    group = models.ForeignKey(Group, related_name="group_set")
+    product = models.ForeignKey(Product,related_name="product_set")
 
     def __str__(self):
         return self.name
@@ -48,8 +40,13 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("products:single", kwargs={"pk": self.pk})
+        return reverse("agreements:single", kwargs={"pk": self.pk})
 
     class Meta:
-        ordering = ["pk"]
-        unique_together = ("name", "type")
+        ordering = ["-pk"]
+        #unique_together = ("name", "purpose")
+
+
+####
+
+####
