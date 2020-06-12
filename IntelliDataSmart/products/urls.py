@@ -7,6 +7,7 @@ app_name = 'products'
 urlpatterns = [
     url(r"^$", views.ListProducts.as_view(), name="all"),
     url(r"^new/$", views.CreateProduct.as_view(), name="create"),
+    url(r"^version/(?P<pk>\d+)/$",views.VersionProduct, name="version"),
     url(r"^search/$", views.SearchProductsForm, name="search"),
     url(r"^search/results/$", views.SearchProductsList.as_view(), name="search_results"),
     url(r"^posts/in/(?P<pk>\d+)/$",views.SingleProduct.as_view(),name="single"),

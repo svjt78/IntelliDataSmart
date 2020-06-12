@@ -1,4 +1,5 @@
 from django.conf import settings
+from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -19,9 +20,11 @@ class Member(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(allow_unicode=True)
     age = models.PositiveIntegerField()
-    #group = models.ForeignKey(Group, on_delete=models.PROTECT, null=True, related_name="association")
-    group = models.ForeignKey(Group, null=True, blank=True, related_name="member_set")
-    #user = models.ForeignKey(User,related_name='userID')
+
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="member_set")
+
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    member_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -36,5 +39,5 @@ class Member(models.Model):
 
 
     class Meta:
-        ordering = ["pk"]
+        ordering = ["-member_date"]
         #unique_together = ["name", "group"]

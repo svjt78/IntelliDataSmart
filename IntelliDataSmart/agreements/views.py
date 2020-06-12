@@ -40,6 +40,11 @@ class CreateAgreement(LoginRequiredMixin, generic.CreateView):
     model = models.Agreement
     template_name = 'agreements/agreement_form.html'
 
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+
+        return super().form_valid(form)
+
 
 class UpdateAgreement(LoginRequiredMixin, generic.UpdateView):
     login_url = '/login/'

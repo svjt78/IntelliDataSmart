@@ -28,8 +28,9 @@ class Agreement(models.Model):
     description_html = models.TextField(editable=False, default='', blank=True)
     coverage_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     agreement_date = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     group = models.ForeignKey(Group, related_name="group_set")
-    product = models.ForeignKey(Product,related_name="product_set")
+    product = models.ManyToManyField(Product,related_name="product_set")
 
     def __str__(self):
         return self.name
@@ -43,7 +44,7 @@ class Agreement(models.Model):
         return reverse("agreements:single", kwargs={"pk": self.pk})
 
     class Meta:
-        ordering = ["-pk"]
+        ordering = ["-agreement_date"]
         #unique_together = ("name", "purpose")
 
 

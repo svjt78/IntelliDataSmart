@@ -11,6 +11,7 @@ urlpatterns = [
     url(r"^(?P<pk>\d+)/members/show/$", views.ShowMembersList.as_view(), name="show_members"),
     url(r"^search/results/$", views.SearchGroupsList.as_view(), name="search_results"),
     url(r"^posts/in/(?P<pk>\d+)/$",views.SingleGroup.as_view(),name="single"),
+    url(r"^version/(?P<pk>\d+)/$",views.VersionGroup, name="version"),
     url(r"^update/(?P<pk>\d+)/$",views.UpdateGroup.as_view(),name="update"),
     url(r"^delete/(?P<pk>\d+)/$",views.DeleteGroup.as_view(),name="delete"),
     url(r"join/(?P<slug>[-\w]+)/$",views.JoinGroup.as_view(),name="join"),

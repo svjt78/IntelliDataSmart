@@ -8,6 +8,8 @@
 
     <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add Members</a>
     &nbsp;
+    <a href="{% url 'groups:version' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Version Group</a>
+    &nbsp;
     <a href="{% url 'groups:update' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Group</a>
     &nbsp;
     <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
@@ -22,8 +24,9 @@
 &nbsp;
 
 <h1>{{group_details.name}}</h1>
-<h2>ID: {{group_details.pk}}</h2>
 <h2>Purpose: {{group_details.purpose}}</h2>
+<h2>Created On: {{group_details.group_date}}</h2>
+<h2>Created By: {{group_details.creator}}</h2>
 <h2>Member Count: {{group_details.member_set.count}}</h2>
 <div style="background-color: rgba(255, 255, 255, 0.8);" data-spy="scroll" data-target=".navbar">
   <div class="list-group-item-text container-fluid">

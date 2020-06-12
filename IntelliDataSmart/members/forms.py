@@ -32,4 +32,5 @@ class MemberForm(forms.ModelForm):
         #fields = '__all__'
         widgets = {
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
+            'creator': forms.TextInput(attrs={'readonly':'readonly'}),
         }

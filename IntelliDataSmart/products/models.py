@@ -1,4 +1,5 @@
 from django.conf import settings
+from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -38,6 +39,8 @@ class Product(models.Model):
     description_html = models.TextField(editable=False, default='', blank=True)
     #coverage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price_per_1000_units = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    product_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -51,5 +54,5 @@ class Product(models.Model):
         return reverse("products:single", kwargs={"pk": self.pk})
 
     class Meta:
-        ordering = ["pk"]
-        unique_together = ("name", "type")
+        ordering = ["-product_date"]
+        unique_together = ("name", "type", "product_date")

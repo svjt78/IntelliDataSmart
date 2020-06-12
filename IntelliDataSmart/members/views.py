@@ -1,5 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+import time
 from django.db.models import Q
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
@@ -12,8 +15,10 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from groups.models import Group
+from members.models import Member
 from . import models
 from . import forms
+from members.forms import MemberForm
 
 
 class SingleMember(generic.DetailView):
@@ -58,6 +63,36 @@ class CreateMember(LoginRequiredMixin, generic.CreateView):
         form.instance.group = self.group
         return super().form_valid(form)
 
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+
+        return super().form_valid(form)
+
+
+def VersionMember(request, pk):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+
+    # fetch the object related to passed id
+    obj = get_object_or_404(Member, pk = pk)
+
+    # pass the object as instance in form
+    form = MemberForm(request.POST or None, instance = obj)
+
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+            obj.pk = int(round(time.time() * 1000))
+            form.save()
+            return HttpResponseRedirect(reverse("members:all"))
+
+    else:
+
+            # add form dictionary to context
+            context["form"] = form
+
+            return render(request, "members/member_form.html", context)
 
 
 class UpdateMember(LoginRequiredMixin, generic.UpdateView):

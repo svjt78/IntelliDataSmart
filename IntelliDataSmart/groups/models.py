@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -24,6 +26,9 @@ class Group(models.Model):
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
     purpose = models.CharField(max_length=255, null=True, default='', blank=True)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    group_date = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
@@ -37,8 +42,8 @@ class Group(models.Model):
         return reverse("groups:single", kwargs={"pk": self.pk})
 
     class Meta:
-        ordering = ["pk"]
-        unique_together = ("name", "purpose")
+        ordering = ["-group_date"]
+        unique_together = ("slug", "purpose", "group_date")
 
 
 class GroupMember(models.Model):

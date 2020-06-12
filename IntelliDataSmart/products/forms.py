@@ -25,4 +25,6 @@ class ProductForm(forms.ModelForm):
 
             'description': forms.Textarea(attrs={'class': 'editable medium-editor-textarea postcontent'}),
 
+        
+
         }

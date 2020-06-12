@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-import time
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -77,9 +76,7 @@ def VersionGroup(request, pk):
     # save the data from the form and
     # redirect to detail_view
     if form.is_valid():
-            obj.pk = int(round(time.time() * 1000))
-            form.save()
-            return HttpResponseRedirect(reverse("groups:all"))
+            return HttpResponseRedirect(reverse("groups:create"))
 
     else:
 

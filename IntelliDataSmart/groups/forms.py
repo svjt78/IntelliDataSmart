@@ -7,10 +7,11 @@ class GroupForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        fields = ('name','description', 'purpose',)
+        fields = ('name','description', 'purpose', 'creator')
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
             'description': forms.Textarea(attrs={'class': 'editable medium-editor-textarea postcontent'}),
             'purpose': forms.TextInput(attrs={'class': 'textinputclass'}),
+            'creator': forms.TextInput(attrs={'readonly':'readonly'}),
         }

@@ -31,9 +31,10 @@
 		{% for member in object_list %}
 		  <a class="list-group-item" href="{% url 'members:single' pk=member.pk %}">
 			     <h3 class="title list-group-item-heading">{{ member.name }}</h3>
-					 <h3 class="title list-group-item-heading">ID: {{ member.pk }}</h3>
-					 <h3 class="title list-group-item-heading">Age: {{ member.age }}</h3>
-					 <h3 class="title list-group-item-heading">Group: {{ member.group }}</h3>
+					 <h4 class="title list-group-item-heading">Age: {{ member.age }}</h4>
+					 <h4 class="title list-group-item-heading">Group: {{ member.group }}</h4>
+					 <h4 class="title list-group-item-heading">Created On: {{ member.member_date }}</h4>
+					 <h4 class="title list-group-item-heading">Created By: {{ member.creator }}</h4>
 		</a>
 		{% endfor %}
 	</div>
