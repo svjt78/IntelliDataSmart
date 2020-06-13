@@ -38,12 +38,13 @@ class Product(models.Model):
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
     #coverage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    coverage_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price_per_1000_units = models.DecimalField(max_digits=4, decimal_places=2, default=0)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     product_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return ("Name: "+self.name + "~" + "Type "+self.type + "~" + "Coverage limit "+ str(self.coverage_limit) + "~" + "Created on "+self.product_date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

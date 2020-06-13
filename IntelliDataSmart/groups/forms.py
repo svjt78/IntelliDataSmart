@@ -7,7 +7,7 @@ class GroupForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        fields = ('name','description', 'purpose', 'creator')
+        fields = ('name','description', 'purpose',)
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),

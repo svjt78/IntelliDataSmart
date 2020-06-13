@@ -26,20 +26,11 @@
 
 <h2>Group: {{agreement_details.group}}</h2>
 
+
 <h2>Products:<br> {% for prod in agreement_details.product.all %}
                     &nbsp;&nbsp;&nbsp;&nbsp;{{prod}}<br>
                 {% endfor %}
 </h2>
-<!--
-<h2>Products:<br> <table>{% for prod in agreement_details.product.all %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                        {% cycle '<tr>' '' '' '' %}
-                          <td>{{prod}}</td>
-                        {% cycle '' '' '' '</tr>' %}
-                      {% endfor %}
-                </table><br>
-</h2>
--->
 
 <h2>Coverage Limit: ${{agreement_details.coverage_limit}}</h2>
 <h2>Created On: {{agreement_details.agreement_date}}</h2>

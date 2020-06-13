@@ -27,7 +27,7 @@ class MemberForm(forms.ModelForm):
 
     class Meta:
         model = Member
-        exclude = ('slug',)
+        exclude = ('slug','creator')
         #fields = ('name', 'age')
         #fields = '__all__'
         widgets = {

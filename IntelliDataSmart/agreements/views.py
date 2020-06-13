@@ -1,5 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+import time
 from django.db.models import Q
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
@@ -46,6 +49,33 @@ class CreateAgreement(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
+def VersionAgreement(request, pk):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+
+    # fetch the object related to passed id
+    obj = get_object_or_404(Agreement, pk = pk)
+
+    # pass the object as instance in form
+    form = forms.AgreementForm(request.POST or None, instance = obj)
+
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+            obj.pk = int(round(time.time() * 1000))
+            form.save()
+            return HttpResponseRedirect(reverse("agreements:all"))
+
+    else:
+
+            # add form dictionary to context
+            context["form"] = form
+
+            return render(request, "agreements/agreement_form.html", context)
+
+
+
 class UpdateAgreement(LoginRequiredMixin, generic.UpdateView):
     login_url = '/login/'
     context_object_name = 'agreement_details'
@@ -80,6 +110,18 @@ class SearchAgreementsList(LoginRequiredMixin, generic.ListView):
         object_list = Agreement.objects.filter(
             Q(pk__icontains=query) | Q(name__icontains=query) | Q(description__icontains=query)
         )
+        return object_list
+
+
+class ShowAgreementsProductsList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    model = Agreement
+    template_name = 'agreements/agreement_products_list.html'
+
+    def get_queryset(self): # new
+        agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
+        object_list = agreement.product.all()
+
         return object_list
 
 

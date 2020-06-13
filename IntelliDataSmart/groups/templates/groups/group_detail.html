@@ -8,6 +8,8 @@
 
     <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add Members</a>
     &nbsp;
+    <a href="{% url 'agreements:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create Agreement</a>
+    &nbsp;
     <a href="{% url 'groups:version' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Version Group</a>
     &nbsp;
     <a href="{% url 'groups:update' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-pencil"></span> Update Group</a>
@@ -15,6 +17,8 @@
     <a href="{% url 'groups:delete' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Delete Group</a>
     &nbsp;
     <a href="{% url 'groups:show_members' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Members</a>
+    &nbsp;
+    <a href="{% url 'groups:show_agreements' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Ageements</a>
 
   </div>
 </div>

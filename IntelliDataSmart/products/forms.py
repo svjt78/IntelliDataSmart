@@ -17,7 +17,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
 
-        fields = ('productid', 'name', 'type', 'description', 'price_per_1000_units',)
+        fields = ('productid', 'name', 'type', 'description', 'price_per_1000_units', 'coverage_limit',)
 
         widgets = {
 
@@ -25,6 +25,6 @@ class ProductForm(forms.ModelForm):
 
             'description': forms.Textarea(attrs={'class': 'editable medium-editor-textarea postcontent'}),
 
-        
+
 
         }

@@ -137,6 +137,16 @@ class ShowMembersList(LoginRequiredMixin, generic.ListView):
 
         return object_list
 
+class ShowAgreementsList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    model = Group
+    template_name = 'agreements/agreement_list.html'
+
+    def get_queryset(self): # new
+        group = get_object_or_404(models.Group, pk=self.kwargs['pk'])
+        object_list = group.group_set.all()
+
+        return object_list
 
 
 class JoinGroup(LoginRequiredMixin, generic.RedirectView):

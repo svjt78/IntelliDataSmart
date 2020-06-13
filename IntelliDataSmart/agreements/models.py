@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.conf import settings
 from datetime import datetime
 from pytz import timezone
@@ -29,7 +30,7 @@ class Agreement(models.Model):
     coverage_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     agreement_date = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    group = models.ForeignKey(Group, related_name="group_set")
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="group_set")
     product = models.ManyToManyField(Product,related_name="product_set")
 
     def __str__(self):
@@ -46,8 +47,3 @@ class Agreement(models.Model):
     class Meta:
         ordering = ["-agreement_date"]
         #unique_together = ("name", "purpose")
-
-
-####
-
-####
