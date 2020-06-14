@@ -44,7 +44,7 @@ class Product(models.Model):
     product_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return ("Name: "+self.name + "~" + "Type "+self.type + "~" + "Coverage limit "+ str(self.coverage_limit) + "~" + "Created on "+self.product_date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
+        return ("Name: "+self.name + "~" + "Type: "+self.type + "~" + "Coverage limit: "+ str(self.coverage_limit) + "~" + "Created on: "+self.product_date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

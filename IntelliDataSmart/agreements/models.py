@@ -27,7 +27,6 @@ class Agreement(models.Model):
     slug = models.SlugField(allow_unicode=True)
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
-    coverage_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     agreement_date = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="group_set")

@@ -20,6 +20,7 @@ from . import forms
 from groups.models import Group,GroupMember
 from members.models import Member
 from agreements.models import Agreement
+from products.models import Product
 
 class SingleAgreement(generic.DetailView):
     context_object_name = 'agreement_details'
@@ -133,5 +134,16 @@ class ShowContractsList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self): # new
         group = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
         object_list = agreement.contract_set.all()
+
+        return object_list
+
+class ShowAgreementsProductsList(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    model = Agreement
+    template_name = 'products/product_list.html'
+
+    def get_queryset(self): # new
+        agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
+        object_list = agreement.product.all()
 
         return object_list

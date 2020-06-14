@@ -12,7 +12,7 @@ class AgreementForm(forms.ModelForm):
         model = Agreement
         exclude = ('slug',)
 
-        fields = ('name','description', 'coverage_limit', 'group', 'product')
+        fields = ('name','description', 'group', 'product')
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
