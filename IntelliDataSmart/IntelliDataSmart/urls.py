@@ -16,12 +16,14 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
+from controlcenter.views import controlcenter
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
     url(r"^test/$", views.TestPage.as_view(), name="test"),
     url(r"^thanks/$", views.ThanksPage.as_view(), name="thanks"),
     url(r"^admin/", admin.site.urls),
+    url(r"^admin/dashboard/", controlcenter.urls),
     url(r"^accounts/", include("Accounts.urls", namespace="accounts")),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r"^members/", include("members.urls", namespace="members")),

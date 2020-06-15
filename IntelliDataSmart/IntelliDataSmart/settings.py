@@ -41,12 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap3',
     'misaka',
+    'controlcenter',
     'Accounts',
     'groups',
     'members',
     'products',
     'agreements',
 ]
+
+CONTROLCENTER_DASHBOARDS = (
+    ('mydash', 'IntelliDataSmart.dashboards.MyDashboard'),
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
