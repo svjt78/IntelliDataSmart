@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.conf import settings
+import uuid
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -21,6 +22,7 @@ register = template.Library()
 
 
 class Group(models.Model):
+    groupid = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True)
     description = models.TextField(blank=True, default='')
@@ -34,6 +36,11 @@ class Group(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+
+        if (self.groupid == None):
+            var = str(uuid.uuid4())
+            self.groupid = var[26:36]
+
         self.slug = slugify(self.name)
         self.description_html = misaka.html(self.description)
         super().save(*args, **kwargs)

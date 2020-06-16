@@ -1,4 +1,5 @@
 from controlcenter import Dashboard, widgets
+from django.db import connection
 from django.db.models import Sum
 from django.db.models import Count
 from products.models import Product
@@ -36,6 +37,20 @@ class MemberByAge(widgets.SingleBarChart):
     queryset = Member.objects.values('name', 'age').filter()
 
 
+class ProductPie(widgets.SinglePieChart):
+    # label and series
+    values_list = ('type', 'count')
+    # Data source
+    queryset = Product.objects.values('type').annotate(count=Count('pk')).order_by('-count')
+    limit_to = 10
+
+class ProductList(widgets.ItemList):
+    # label and series
+    list_display = ('type', 'count')
+    # Data source
+    queryset = Product.objects.values('type').annotate(count=Count('pk')).order_by('-count')
+    limit_to = 10
+
 class MemberCountByGroup(widgets.SingleBarChart):
     # label and series
     title = 'Members By Group'
@@ -69,14 +84,14 @@ class AgreementList(widgets.ItemList):
     model = Agreement
     list_display = ('name', 'group', 'agreement_date')
 
-
-
 class MyDashboard(Dashboard):
     widgets = (
         CoverageLimitsProducts,
         RateByProducts,
         MemberByAge,
+        ProductPie,
         MemberCountByGroup,
+        ProductList,
         AgreementByProducts,
         GroupList,
         AgreementList,

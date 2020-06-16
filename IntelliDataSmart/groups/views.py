@@ -121,7 +121,7 @@ class SearchGroupsList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self, **kwargs): # new
         query = self.request.GET.get('q', None)
         object_list = Group.objects.filter(
-            Q(pk__icontains=query) | Q(name__icontains=query) | Q(description__icontains=query) | Q(purpose__icontains=query)
+            Q(groupid__icontains=query) | Q(name__icontains=query) | Q(description__icontains=query) | Q(purpose__icontains=query)
         )
         return object_list
 

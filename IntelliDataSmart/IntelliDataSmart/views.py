@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
 
 class TestPage(TemplateView):
     template_name = 'test.html'
@@ -15,3 +16,6 @@ class HomePage(TemplateView):
         if request.user.is_authenticated():
             return HttpResponseRedirect(reverse("test"))
         return super().get(request, *args, **kwargs)
+
+def GotoAdmin(request):
+    return HttpResponseRedirect(reverse("admin:index"))

@@ -31,6 +31,8 @@ class MemberForm(forms.ModelForm):
         #fields = ('name', 'age')
         #fields = '__all__'
         widgets = {
+            'memberid': forms.TextInput(attrs={'readonly':'readonly'}),
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
+            'email_address': forms.EmailField(max_length = 200),
             'creator': forms.TextInput(attrs={'readonly':'readonly'}),
         }

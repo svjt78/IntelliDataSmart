@@ -38,6 +38,7 @@
 		{% for group in object_list %}
 			<a class="list-group-item" href="{% url 'groups:single' pk=group.pk %}">
 			     <h3 class="title list-group-item-heading">{{ group.name }}</h3>
+					 <h4 class="title list-group-item-heading">Group ID: {{ group.groupid }}</h4>
 					 <h4 class="title list-group-item-heading">Purpose: {{ group.purpose }}</h4>
 					 <h4 class="title list-group-item-heading">Created On: {{ group.group_date }}</h4>
 					 <h4 class="title list-group-item-heading">Created By: {{ group.creator }}</h4>

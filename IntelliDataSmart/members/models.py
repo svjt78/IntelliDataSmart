@@ -1,5 +1,6 @@
 from django.conf import settings
 from datetime import datetime
+import uuid
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -17,9 +18,11 @@ from django import template
 register = template.Library()
 
 class Member(models.Model):
+    memberid = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=256)
     slug = models.SlugField(allow_unicode=True)
     age = models.PositiveIntegerField()
+    email = models.EmailField(max_length=254, blank=True, null=True)
 
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="member_set")
 
@@ -30,6 +33,11 @@ class Member(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+
+        if (self.memberid == None):
+            var = str(uuid.uuid4())
+            self.memberid = var[26:36]
+
         self.slug = slugify(self.name)
     #    self.description_html = misaka.html(self.description)
         super().save(*args, **kwargs)
