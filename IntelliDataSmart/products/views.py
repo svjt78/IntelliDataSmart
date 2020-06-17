@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import user_passes_test
 import time
 from django.db.models import Q
 from django.contrib.auth.mixins import(
@@ -36,8 +40,9 @@ class ListProducts(generic.ListView):
         return models.Product.objects.all()
 
 
-class CreateProduct(LoginRequiredMixin, generic.CreateView):
+class CreateProduct(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
 #    fields = ("name", "description")
+    permission_required = 'products.add_product'
     login_url = '/login/'
     context_object_name = 'product_details'
     redirect_field_name = 'products/product_list.html'
@@ -46,11 +51,15 @@ class CreateProduct(LoginRequiredMixin, generic.CreateView):
     template_name = 'products/product_form.html'
 
     def form_valid(self, form):
-        form.instance.creator = self.request.user
+        if not self.request.user.has_perm('products.add_product'):
+            raise HttpResponseForbidden()
+        else:
+            form.instance.creator = self.request.user
 
-        return super().form_valid(form)
+            return super().form_valid(form)
 
 
+@permission_required("products.add_product")
 def VersionProduct(request, pk):
     # dictionary for initial data with
     # field names as keys
@@ -77,7 +86,8 @@ def VersionProduct(request, pk):
             return render(request, "products/product_form.html", context)
 
 
-class UpdateProduct(LoginRequiredMixin, generic.UpdateView):
+class UpdateProduct(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    permission_required = 'products.change_product'
     login_url = '/login/'
     context_object_name = 'product_details'
     redirect_field_name = 'products/product_detail.html'
@@ -85,14 +95,31 @@ class UpdateProduct(LoginRequiredMixin, generic.UpdateView):
     model = models.Product
     template_name = 'products/product_form.html'
 
+    def form_valid(self, form):
 
-class DeleteProduct(LoginRequiredMixin, generic.DeleteView):
+        if not self.request.user.has_perm('products.change_product'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
+
+
+
+class DeleteProduct(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    permission_required = 'products.delete_product'
     login_url = '/login/'
     context_object_name = 'product_details'
     form_class = forms.ProductForm
     model = models.Product
     template_name = 'products/product_delete_confirm.html'
     success_url = reverse_lazy("products:all")
+
+    def form_valid(self, form):
+
+        if not self.request.user.has_perm('products.delete_product'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
+
 
 
 def SearchProductsForm(request):

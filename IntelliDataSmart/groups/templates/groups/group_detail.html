@@ -10,7 +10,7 @@
     &nbsp;
     <a href="{% url 'groups:show_members' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Members</a>
     &nbsp;
-    <a href="{% url 'agreements:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create Agreement</a>
+    <a href="{% url 'agreements:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create Agreement</a>
     &nbsp;
     <a href="{% url 'groups:show_agreements' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Ageements</a>
     &nbsp;

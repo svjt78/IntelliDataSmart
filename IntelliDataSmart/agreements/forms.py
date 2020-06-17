@@ -12,9 +12,10 @@ class AgreementForm(forms.ModelForm):
         model = Agreement
         exclude = ('slug',)
 
-        fields = ('name','description', 'group', 'product')
+        fields = ('agreementid', 'name','description', 'group', 'product')
 
         widgets = {
+            'agreementid': forms.TextInput(attrs={'readonly':'readonly'}),
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
             'description': forms.Textarea(attrs={'class': 'editable medium-editor-textarea postcontent'}),
 

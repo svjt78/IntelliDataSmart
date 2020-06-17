@@ -1,6 +1,10 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import user_passes_test
 import time
 from django.shortcuts import render
 from django.contrib.auth.models import User
@@ -48,8 +52,9 @@ class ListGroups(generic.ListView):
         return Group.objects.all()
         #self.extra_context["member_count"] = Group.objects.annotate(association_count=Count('member_set'))
 
-class CreateGroup(LoginRequiredMixin, generic.CreateView):
+class CreateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
 #    fields = ("name", "description")
+    permission_required = 'groups.add_group'
     login_url = '/login/'
     context_object_name = 'group_details'
     redirect_field_name = 'groups/group_list.html'
@@ -58,39 +63,47 @@ class CreateGroup(LoginRequiredMixin, generic.CreateView):
     template_name = 'groups/group_form.html'
 
     def form_valid(self, form):
-        form.instance.creator = self.request.user
 
-        return super().form_valid(form)
+        if not self.request.user.has_perm('groups.add_group'):
+            raise HttpResponseForbidden()
+        else:
+            form.instance.creator = self.request.user
+
+            return super().form_valid(form)
 
 
+@permission_required("groups.add_group")
 def VersionGroup(request, pk):
     # dictionary for initial data with
     # field names as keys
-    context ={}
-
-    # fetch the object related to passed id
-    obj = get_object_or_404(Group, pk = pk)
-
-    # pass the object as instance in form
-    form = GroupForm(request.POST or None, instance = obj)
-
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-            obj.pk = int(round(time.time() * 1000))
-            form.save()
-            return HttpResponseRedirect(reverse("groups:all"))
-
-    else:
-
-            # add form dictionary to context
-            context["form"] = form
-
-            return render(request, "groups/group_form.html", context)
 
 
-class UpdateGroup(LoginRequiredMixin, generic.UpdateView):
+        context ={}
+
+        # fetch the object related to passed id
+        obj = get_object_or_404(Group, pk = pk)
+
+        # pass the object as instance in form
+        form = GroupForm(request.POST or None, instance = obj)
+
+        # save the data from the form and
+        # redirect to detail_view
+        if form.is_valid():
+                obj.pk = int(round(time.time() * 1000))
+                form.save()
+                return HttpResponseRedirect(reverse("groups:all"))
+
+        else:
+
+                # add form dictionary to context
+                context["form"] = form
+
+                return render(request, "groups/group_form.html", context)
+
+
+class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
 #    fields = ("name", "description")
+    permission_required = 'groups.change_group'
     login_url = '/login/'
     context_object_name = 'group_details'
     redirect_field_name = 'groups/group_detail.html'
@@ -98,15 +111,30 @@ class UpdateGroup(LoginRequiredMixin, generic.UpdateView):
     model = models.Group
     template_name = 'groups/group_form.html'
 
+    def form_valid(self, form):
 
-class DeleteGroup(LoginRequiredMixin, generic.DeleteView):
+        if not self.request.user.has_perm('groups.change_group'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
+
+
+class DeleteGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
 #    fields = ("name", "description")
+    permission_required = 'groups.delete_group'
     login_url = '/login/'
     context_object_name = 'group_details'
     form_class = forms.GroupForm
     model = models.Group
     template_name = 'groups/group_delete_confirm.html'
     success_url = reverse_lazy("groups:all")
+
+    def form_valid(self, form):
+
+        if not self.request.user.has_perm('groups.delete_group'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
 
 
 def SearchGroupsForm(request):

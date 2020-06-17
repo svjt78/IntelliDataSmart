@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import user_passes_test
 import time
 from django.db.models import Q
 from django.contrib.auth.mixins import(
@@ -39,8 +43,9 @@ class ListMembers(generic.ListView):
     #    return Member.objects.all
         return models.Member.objects.prefetch_related('group')
 
-class CreateMember(LoginRequiredMixin, generic.CreateView):
+class CreateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     #fields = ("name", "age")
+    permission_required = 'members.add_member'
     login_url = '/login/'
     template_name = 'members/member_form.html'
     context_object_name = 'member_details'
@@ -57,18 +62,19 @@ class CreateMember(LoginRequiredMixin, generic.CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        """
-        Overridden to add the group relation to the `Member` instance.
-        """
-        form.instance.group = self.group
-        return super().form_valid(form)
 
-    def form_valid(self, form):
-        form.instance.creator = self.request.user
+        if not self.request.user.has_perm('members.add_member'):
+            raise HttpResponseForbidden()
+        else:
+            """
+            Overridden to add the group relation to the `Member` instance.
+            """
+            form.instance.group = self.group
+            form.instance.creator = self.request.user
+            return super().form_valid(form)
 
-        return super().form_valid(form)
 
-
+@permission_required("members.add_member")
 def VersionMember(request, pk):
     # dictionary for initial data with
     # field names as keys
@@ -95,8 +101,9 @@ def VersionMember(request, pk):
             return render(request, "members/member_form.html", context)
 
 
-class UpdateMember(LoginRequiredMixin, generic.UpdateView):
+class UpdateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     #fields = ("name", "age")
+    permission_required = 'members.change_member'
     login_url = '/login/'
     template_name = 'members/member_form.html'
     #context_object_name = 'member_details'
@@ -104,8 +111,16 @@ class UpdateMember(LoginRequiredMixin, generic.UpdateView):
     model = models.Member
     form_class = forms.MemberForm
 
+    def form_valid(self, form):
 
-class DeleteMember(LoginRequiredMixin, generic.DeleteView,):
+        if not self.request.user.has_perm('members.change_member'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
+
+
+class DeleteMember(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView,):
+    permission_required = 'members.delete_member'
     login_url = '/login/'
     context_object_name = 'member_details'
     form_class = forms.MemberForm
@@ -117,6 +132,14 @@ class DeleteMember(LoginRequiredMixin, generic.DeleteView,):
     def delete(self, *args, **kwargs):
         messages.success(self.request, "Member Deleted")
         return super().delete(*args, **kwargs)
+
+    def form_valid(self, form):
+
+        if not self.request.user.has_perm('members.delete_member'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
+
 
 def SearchMembersForm(request):
     return render(request,'members/member_search_form.html')

@@ -44,20 +44,9 @@ class CreateAgreement(LoginRequiredMixin, generic.CreateView):
     model = models.Agreement
     template_name = 'agreements/agreement_form.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        """
-        Overridden so we can make sure the `Group` instance exists
-        before going any further.
-        """
-        self.group = get_object_or_404(models.Group, pk=kwargs['pk'])
-        return super().dispatch(request, *args, **kwargs)
-
     def form_valid(self, form):
-        """
-        Overridden to add the group relation to the `Member` instance.
-        """
-        form.instance.group = self.group
         form.instance.creator = self.request.user
+
         return super().form_valid(form)
 
 
