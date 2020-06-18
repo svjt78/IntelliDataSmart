@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import user_passes_test
 import time
 from django.db.models import Q
 from django.contrib.auth.mixins import(
@@ -36,7 +40,8 @@ class ListAgreements(generic.ListView):
         return Agreement.objects.all()
 
 
-class CreateAgreement(LoginRequiredMixin, generic.CreateView):
+class CreateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+    permission_required = 'agreements.add_agreement'
     login_url = '/login/'
     context_object_name = 'agreement_details'
     redirect_field_name = 'agreements/agreement_list.html'
@@ -45,6 +50,7 @@ class CreateAgreement(LoginRequiredMixin, generic.CreateView):
     template_name = 'agreements/agreement_form.html'
 
     def dispatch(self, request, *args, **kwargs):
+
         """
         Overridden so we can make sure the `Group` instance exists
         before going any further.
@@ -53,14 +59,19 @@ class CreateAgreement(LoginRequiredMixin, generic.CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        """
-        Overridden to add the group relation to the `Member` instance.
-        """
-        form.instance.group = self.group
-        form.instance.creator = self.request.user
-        return super().form_valid(form)
+
+        if not self.request.user.has_perm('agreements.add_agreement'):
+            raise HttpResponseForbidden()
+        else:
+            """
+            Overridden to add the group relation to the `Member` instance.
+            """
+            form.instance.group = self.group
+            form.instance.creator = self.request.user
+            return super().form_valid(form)
 
 
+@permission_required("agreements.add_agreement")
 def VersionAgreement(request, pk):
     # dictionary for initial data with
     # field names as keys
@@ -88,7 +99,8 @@ def VersionAgreement(request, pk):
 
 
 
-class UpdateAgreement(LoginRequiredMixin, generic.UpdateView):
+class UpdateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    permission_required = 'agreements.change_agreement'
     login_url = '/login/'
     context_object_name = 'agreement_details'
     redirect_field_name = 'agreements/agreement_detail.html'
@@ -96,16 +108,30 @@ class UpdateAgreement(LoginRequiredMixin, generic.UpdateView):
     model = models.Agreement
     template_name = 'agreements/agreement_form.html'
 
+    def form_valid(self, form):
+
+        if not self.request.user.has_perm('agreements.change_agreement'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
 
 
-class DeleteAgreement(LoginRequiredMixin, generic.DeleteView):
+class DeleteAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
 #    fields = ("name", "description")
+    permission_required = 'agreements.delete_agreement'
     login_url = '/login/'
     context_object_name = 'agreement_details'
     form_class = forms.AgreementForm
     model = models.Agreement
     template_name = 'agreements/agreement_delete_confirm.html'
     success_url = reverse_lazy("agreements:all")
+
+    def form_valid(self, form):
+
+        if not self.request.user.has_perm('agreements.delete_agreement'):
+            raise HttpResponseForbidden()
+        else:
+            return super().form_valid(form)
 
 
 def SearchAgreementsForm(request):

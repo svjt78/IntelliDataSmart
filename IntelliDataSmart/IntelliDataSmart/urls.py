@@ -20,7 +20,7 @@ from controlcenter.views import controlcenter
 
 urlpatterns = [
     url(r"^$", views.HomePage.as_view(), name="home"),
-    url(r"^test/$", views.TestPage.as_view(), name="test"),
+    url(r"^landing/$", views.TestPage.as_view(), name="test"),
     url(r"^thanks/$", views.ThanksPage.as_view(), name="thanks"),
     url(r"^gotoadmin/$", views.GotoAdmin, name="admin"),
     url(r"^admin/", admin.site.urls),
