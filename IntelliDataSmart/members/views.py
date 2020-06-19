@@ -25,13 +25,13 @@ from . import forms
 from members.forms import MemberForm
 
 
-class SingleMember(generic.DetailView):
+class SingleMember(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'member_details'
     model = models.Member
     template_name = 'members/member_detail.html'
     #form_class = forms.MemberForm
 
-class ListMembers(generic.ListView):
+class ListMembers(LoginRequiredMixin, generic.ListView):
     context_object_name = 'member_list'
     model = models.Member
     template_name = 'members/member_list.html'
@@ -43,10 +43,10 @@ class ListMembers(generic.ListView):
     #    return Member.objects.all
         return models.Member.objects.prefetch_related('group')
 
+
 class CreateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     #fields = ("name", "age")
     permission_required = 'members.add_member'
-    login_url = '/login/'
     template_name = 'members/member_form.html'
     context_object_name = 'member_details'
     redirect_field_name = 'members/member_detail.html'
@@ -104,7 +104,6 @@ def VersionMember(request, pk):
 class UpdateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     #fields = ("name", "age")
     permission_required = 'members.change_member'
-    login_url = '/login/'
     template_name = 'members/member_form.html'
     #context_object_name = 'member_details'
     redirect_field_name = 'members/member_detail.html'
@@ -121,7 +120,6 @@ class UpdateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateVi
 
 class DeleteMember(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView,):
     permission_required = 'members.delete_member'
-    login_url = '/login/'
     context_object_name = 'member_details'
     form_class = forms.MemberForm
     model = models.Member

@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 import time
 from django.shortcuts import render
@@ -37,13 +38,13 @@ from groups.forms import GroupForm
 #    model = Group
 
 
-class SingleGroup(generic.DetailView):
+class SingleGroup(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'group_details'
     model = models.Group
     template_name = 'groups/group_detail.html'
     #form_class = forms.GroupForm
 
-class ListGroups(generic.ListView):
+class ListGroups(LoginRequiredMixin, generic.ListView):
     model = models.Group
     template_name = 'groups/group_list.html'
     #form_class = forms.GroupForm
@@ -55,7 +56,6 @@ class ListGroups(generic.ListView):
 class CreateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
 #    fields = ("name", "description")
     permission_required = 'groups.add_group'
-    login_url = '/login/'
     context_object_name = 'group_details'
     redirect_field_name = 'groups/group_list.html'
     form_class = forms.GroupForm
@@ -73,6 +73,7 @@ class CreateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateVie
 
 
 @permission_required("groups.add_group")
+@login_required
 def VersionGroup(request, pk):
     # dictionary for initial data with
     # field names as keys
@@ -104,7 +105,6 @@ def VersionGroup(request, pk):
 class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
 #    fields = ("name", "description")
     permission_required = 'groups.change_group'
-    login_url = '/login/'
     context_object_name = 'group_details'
     redirect_field_name = 'groups/group_detail.html'
     form_class = forms.GroupForm
@@ -122,7 +122,6 @@ class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateVie
 class DeleteGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
 #    fields = ("name", "description")
     permission_required = 'groups.delete_group'
-    login_url = '/login/'
     context_object_name = 'group_details'
     form_class = forms.GroupForm
     model = models.Group
@@ -137,12 +136,12 @@ class DeleteGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteVie
             return super().form_valid(form)
 
 
+@login_required
 def SearchGroupsForm(request):
     return render(request,'groups/group_search_form.html')
 
 
 class SearchGroupsList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
     model = Group
     template_name = 'groups/group_search_list.html'
 
@@ -155,7 +154,6 @@ class SearchGroupsList(LoginRequiredMixin, generic.ListView):
 
 
 class ShowMembersList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
     model = Group
     template_name = 'members/member_list.html'
 
@@ -166,7 +164,6 @@ class ShowMembersList(LoginRequiredMixin, generic.ListView):
         return object_list
 
 class ShowAgreementsList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
     model = Group
     template_name = 'agreements/agreement_list.html'
 

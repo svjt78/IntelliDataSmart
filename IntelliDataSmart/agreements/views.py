@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.decorators import user_passes_test
 import time
 from django.db.models import Q
@@ -26,12 +26,12 @@ from members.models import Member
 from agreements.models import Agreement
 from products.models import Product
 
-class SingleAgreement(generic.DetailView):
+class SingleAgreement(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'agreement_details'
     model = models.Agreement
     template_name = 'agreements/agreement_detail.html'
 
-class ListAgreements(generic.ListView):
+class ListAgreements(LoginRequiredMixin, generic.ListView):
     model = models.Agreement
     template_name = 'agreements/agreement_list.html'
     #form_class = forms.GroupForm
@@ -42,7 +42,6 @@ class ListAgreements(generic.ListView):
 
 class CreateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     permission_required = 'agreements.add_agreement'
-    login_url = '/login/'
     context_object_name = 'agreement_details'
     redirect_field_name = 'agreements/agreement_list.html'
     form_class = forms.AgreementForm
@@ -72,6 +71,7 @@ class CreateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.Creat
 
 
 @permission_required("agreements.add_agreement")
+@login_required
 def VersionAgreement(request, pk):
     # dictionary for initial data with
     # field names as keys
@@ -101,7 +101,6 @@ def VersionAgreement(request, pk):
 
 class UpdateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     permission_required = 'agreements.change_agreement'
-    login_url = '/login/'
     context_object_name = 'agreement_details'
     redirect_field_name = 'agreements/agreement_detail.html'
     form_class = forms.AgreementForm
@@ -119,7 +118,6 @@ class UpdateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
 class DeleteAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
 #    fields = ("name", "description")
     permission_required = 'agreements.delete_agreement'
-    login_url = '/login/'
     context_object_name = 'agreement_details'
     form_class = forms.AgreementForm
     model = models.Agreement
@@ -134,6 +132,7 @@ class DeleteAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.Delet
             return super().form_valid(form)
 
 
+@login_required
 def SearchAgreementsForm(request):
     return render(request,'agreements/agreement_search_form.html')
 
@@ -151,36 +150,23 @@ class SearchAgreementsList(LoginRequiredMixin, generic.ListView):
         return object_list
 
 
-class ShowAgreementsProductsList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
-    model = Agreement
-    template_name = 'agreements/agreement_products_list.html'
-
-    def get_queryset(self): # new
-        agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
-        object_list = agreement.product.all()
-
-        return object_list
-
-
 class ShowContractsList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
     model = Agreement
     template_name = 'agreements/agreement_list.html'
 
     def get_queryset(self): # new
-        group = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
+        agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
         object_list = agreement.contract_set.all()
 
         return object_list
 
-class ShowAgreementsProductsList(LoginRequiredMixin, generic.ListView):
-    login_url = '/login/'
+class ShowAgreementsProduct(LoginRequiredMixin, generic.DetailView):
     model = Agreement
-    template_name = 'products/product_list.html'
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product_details'
 
-    def get_queryset(self): # new
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
-        object_list = agreement.product.all()
-
-        return object_list
+        context['product_details'] = agreement.product
+        return context

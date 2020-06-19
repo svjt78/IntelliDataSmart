@@ -23,13 +23,11 @@
 &nbsp;
 
 <h1>{{agreement_details.name}}</h1>
-<h2>Group: {{agreement_details.agreementid}}</h2>
+<h2>ID: {{agreement_details.agreementid}}</h2>
 <h2>Group: {{agreement_details.group}}</h2>
 
-<h3>Products:<br> {% for prod in agreement_details.product.all %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;{{prod}}<br><br>
-                {% endfor %}
-</h3>
+<h2>Product: {{agreement_details.product}}</h2>
+
 <!--
 <h2>Products:<br> <table>{% for prod in agreement_details.product.all %}
                     &nbsp;&nbsp;&nbsp;&nbsp;

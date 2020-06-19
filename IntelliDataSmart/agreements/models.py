@@ -32,7 +32,7 @@ class Agreement(models.Model):
     agreement_date = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="group_set")
-    product = models.ManyToManyField(Product)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name="agreements_products_set")
 
     def __str__(self):
         return self.name

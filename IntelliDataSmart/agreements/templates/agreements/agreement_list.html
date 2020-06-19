@@ -37,18 +37,11 @@
 		{% for agreement in object_list %}
 			<a class="list-group-item" href="{% url 'agreements:single' pk=agreement.pk %}">
 			     <h3 class="title list-group-item-heading">{{ agreement.name }}</h3>
-					 <br>
 					 <h4 class="title list-group-item-heading">ID: {{ agreement.agreementid }}</h4>
-					 <br>
 					 <h4 class="title list-group-item-heading">Group: {{ agreement.group }}</h4>
-					 <br>
-					 <h4 class="title list-group-item-heading">Products:<br> {% for prod in agreement.product.all %}
-					                     &nbsp;&nbsp;&nbsp;&nbsp;<em>{{prod}}</em><br>
-					                 {% endfor %}</h4>
-
-					<br>
+					 <h4 class="title list-group-item-heading">Product: {{ agreement.product }}</h4>
 					 <h4 class="title list-group-item-heading">Created On: {{ agreement.agreement_date }}</h4>
-					 <br>
+
 			<div class="list-group-item-text container-fluid">
 
 				<div class="row">
