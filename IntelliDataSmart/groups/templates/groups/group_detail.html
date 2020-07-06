@@ -8,6 +8,8 @@
 
     <a href="{% url 'members:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Add Members</a>
     &nbsp;
+    <a href="{% url 'members:upload' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Upload Members</a>
+    &nbsp;
     <a href="{% url 'groups:show_members' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Show Members</a>
     &nbsp;
     <a href="{% url 'agreements:create' pk=group_details.pk %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create Agreement</a>

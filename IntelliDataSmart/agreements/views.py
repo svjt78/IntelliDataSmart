@@ -26,6 +26,12 @@ from members.models import Member
 from agreements.models import Agreement
 from products.models import Product
 
+# For Rest rest_framework
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from agreements.serializers import AgreementSerializer
+
 class SingleAgreement(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'agreement_details'
     model = models.Agreement
@@ -87,6 +93,7 @@ def VersionAgreement(request, pk):
     # redirect to detail_view
     if form.is_valid():
             obj.pk = int(round(time.time() * 1000))
+            form.instance.creator = request.user
             form.save()
             return HttpResponseRedirect(reverse("agreements:all"))
 
@@ -112,6 +119,7 @@ class UpdateAgreement(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
         if not self.request.user.has_perm('agreements.change_agreement'):
             raise HttpResponseForbidden()
         else:
+            form.instance.creator = self.request.user
             return super().form_valid(form)
 
 
@@ -170,3 +178,21 @@ class ShowAgreementsProduct(LoginRequiredMixin, generic.DetailView):
         agreement = get_object_or_404(models.Agreement, pk=self.kwargs['pk'])
         context['product_details'] = agreement.product
         return context
+
+
+@api_view(['GET', 'POST'])
+def AgreementList(request):
+
+    if request.method == 'GET':
+        contacts = Agreement.objects.all()
+        serializer = AgreementSerializer(contacts, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = AgreementSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

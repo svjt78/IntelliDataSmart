@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 import time
 from django.db.models import Q
@@ -23,6 +24,13 @@ from members.models import Member
 from . import models
 from . import forms
 from members.forms import MemberForm
+import csv
+from groups.utils import BulkCreateManager
+import os.path
+from os import path
+from django.utils.text import slugify
+import misaka
+import uuid
 
 
 class SingleMember(LoginRequiredMixin, generic.DetailView):
@@ -74,6 +82,7 @@ class CreateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateVi
             return super().form_valid(form)
 
 
+@login_required
 @permission_required("members.add_member")
 def VersionMember(request, pk):
     # dictionary for initial data with
@@ -90,6 +99,7 @@ def VersionMember(request, pk):
     # redirect to detail_view
     if form.is_valid():
             obj.pk = int(round(time.time() * 1000))
+            form.instance.creator = request.user
             form.save()
             return HttpResponseRedirect(reverse("members:all"))
 
@@ -115,6 +125,7 @@ class UpdateMember(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateVi
         if not self.request.user.has_perm('members.change_member'):
             raise HttpResponseForbidden()
         else:
+            form.instance.creator = self.request.user
             return super().form_valid(form)
 
 
@@ -154,3 +165,27 @@ class SearchMembersList(LoginRequiredMixin, generic.ListView):
             Q(name__icontains=query) | Q(age__icontains=query)
         )
         return object_list
+
+
+@permission_required("members.add_member")
+@login_required
+def BulkUploadMember(request, pk, *args, **kwargs):
+
+    if not path.exists('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/members.csv'):
+        return render(request, "members/member_list.html", {'FileNotFound': True})
+    else:
+        with open('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/members.csv', 'rt') as csv_file:
+            bulk_mgr = BulkCreateManager(chunk_size=20)
+            for row in csv.reader(csv_file):
+                bulk_mgr.add(models.Member(memberid = str(uuid.uuid4())[26:36],
+                                          name=row[0],
+                                          slug=slugify(row[0]),
+                                          age=int(row[1]),
+                                          email=row[2],
+                                          phone=row[3],
+                                          group=get_object_or_404(models.Group, pk=pk),
+                                          creator = request.user
+                                          ))
+            bulk_mgr.done()
+
+    return HttpResponseRedirect(reverse("members:all"))

@@ -3,10 +3,12 @@ from django.core.exceptions import ValidationError
 from members.models import *
 
 from .models import Member
+from phonenumber_field.formfields import PhoneNumberField
 
 
 class MemberForm(forms.ModelForm):
     age: forms.IntegerField()
+    phone = PhoneNumberField()
     # this function will be used for the validation
     def clean(self):
 
@@ -14,6 +16,7 @@ class MemberForm(forms.ModelForm):
                 super(MemberForm, self).clean()
 
                 # extract the username and text field from the data
+                phone = self.cleaned_data.get('phone')
                 age = self.cleaned_data.get('age')
 
                 # age range check
@@ -35,4 +38,5 @@ class MemberForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
             'email_address': forms.EmailField(max_length = 200),
             'creator': forms.TextInput(attrs={'readonly':'readonly'}),
+
         }

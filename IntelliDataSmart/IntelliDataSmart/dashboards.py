@@ -18,7 +18,7 @@ class CoverageLimitsProducts(widgets.SingleBarChart):
     #limit_to = 3
 
 
-lass CoverageLimitsAgreements(widgets.SingleBarChart):
+class CoverageLimitsAgreements(widgets.SingleBarChart):
     # label and series
     title = 'Coverage limits by Agreements'
 
@@ -82,22 +82,25 @@ class AgreementCountByGroup(widgets.SingleBarChart):
     queryset = Group.objects.order_by('-number_of_agreements').annotate(number_of_agreements=Count('group_set')) # annotate the queryset
 
 
-class AgreementByProducts(widgets.ItemList):
-    # label and series
-    title = 'Coverage limits by Agreements and Products'
-    model = Product
-    list_display = ('name', 'agreements_products_set', 'coverage_limit')
+
 
     # Data source
     #queryset = Product.objects.order_by('-coverage_limit').annotate(Sum('coverage_limit'))
 
-class GroupProductAgreementGroups(widgets.ItemList):
+class GroupProductAgreement(widgets.ItemList):
     # label and series
     title = 'Coverage limits by Agreements and Products'
     model = Agreement
-    list_display = ('group_set', 'agreements_products_set', 'name')
+    list_display = ('product', 'name', 'coverage')
 
-#2
+
+class CoverageByGroupsProductsAgreement(widgets.SingleBarChart):
+    # label and series
+    title = 'Coverage by Products and Agreement'
+    model = Agreement
+    values_list = ('product', 'coverage')
+    queryset = Agreement.objects.values('product').annotate(Sum('coverage')).order_by('coverage')
+
 class GroupList(widgets.ItemList):
     title = 'Groups by Purpose'
     model = Group
@@ -118,9 +121,9 @@ class MyDashboard(Dashboard):
         ProductPie,
         MemberCountByGroup,
         AgreementCountByGroup,
-        GroupProductAgreementGroups,
+        GroupProductAgreement,
+        CoverageByGroupsProductsAgreement,
         ProductList,
-        AgreementByProducts,
         GroupList,
         AgreementList,
 

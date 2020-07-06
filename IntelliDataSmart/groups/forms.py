@@ -14,5 +14,4 @@ class GroupForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'textinputclass'}),
             'description': forms.Textarea(attrs={'class': 'editable medium-editor-textarea postcontent'}),
             'purpose': forms.TextInput(attrs={'class': 'textinputclass'}),
-            'creator': forms.TextInput(attrs={'readonly':'readonly'}),
         }

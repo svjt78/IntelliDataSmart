@@ -33,6 +33,9 @@ class Agreement(models.Model):
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="group_set")
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name="agreements_products_set")
+    coverage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price_per_1000_units = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+
 
     def __str__(self):
         return self.name

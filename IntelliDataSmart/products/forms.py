@@ -13,6 +13,7 @@ class ProductForm(forms.ModelForm):
 
     productid: forms.IntegerField()
     price_per_1000_units: forms.DecimalField()
+    coverage_limit: forms.DecimalField()
 
     class Meta:
         model = Product

@@ -6,13 +6,14 @@ from .models import Agreement
 
 
 class AgreementForm(forms.ModelForm):
-    coverage_limit: forms.DecimalField()
+    price_per_1000_units: forms.DecimalField()
+    coverage: forms.DecimalField()
 
     class Meta:
         model = Agreement
         exclude = ('slug',)
 
-        fields = ('agreementid', 'name','description', 'group', 'product')
+        fields = ('agreementid', 'name','description', 'group', 'product', 'price_per_1000_units', 'coverage',)
 
         widgets = {
             'agreementid': forms.TextInput(attrs={'readonly':'readonly'}),

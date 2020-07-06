@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 from groups.models import Group
+from phonenumber_field.modelfields import PhoneNumberField
 # from accounts.models import User
 
 import misaka
@@ -23,6 +24,7 @@ class Member(models.Model):
     slug = models.SlugField(allow_unicode=True)
     age = models.PositiveIntegerField()
     email = models.EmailField(max_length=254, blank=True, null=True)
+    phone = PhoneNumberField(null=True, blank=True, unique=False)
 
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="member_set")
 

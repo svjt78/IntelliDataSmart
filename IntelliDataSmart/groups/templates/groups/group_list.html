@@ -21,8 +21,16 @@
 
 	</div>
 
-	
+
 	<a href="{% url 'groups:create' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Create New Group!</a>
+	&nbsp;
+	<a href="{% url 'groups:bulk' %}" class="btn btn-md btn-fill btn-warning"><span class="glyphicon glyphicon-plus-sign"></span> Uplaod Groups!</a>
+	&nbsp;
+	{% if FileNotFound %}
+    <div id="some_flag" title="Some Flag">
+        <h2>File Does Not Exist!</h2>
+    </div>
+	{% endif %}
 
 </div>
 

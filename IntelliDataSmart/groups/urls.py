@@ -15,6 +15,7 @@ urlpatterns = [
     url(r"^version/(?P<pk>\d+)/$",views.VersionGroup, name="version"),
     url(r"^update/(?P<pk>\d+)/$",views.UpdateGroup.as_view(),name="update"),
     url(r"^delete/(?P<pk>\d+)/$",views.DeleteGroup.as_view(),name="delete"),
+    url(r"^bulkupload/$",views.BulkUploadGroup,name="bulk"),
     url(r"join/(?P<slug>[-\w]+)/$",views.JoinGroup.as_view(),name="join"),
     url(r"leave/(?P<slug>[-\w]+)/$",views.LeaveGroup.as_view(),name="leave"),
 ]

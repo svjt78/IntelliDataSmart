@@ -25,6 +25,14 @@ from products.models import Product
 from . import models
 from . import forms
 from products.forms import ProductForm
+import csv
+from groups.utils import BulkCreateManager
+import os.path
+from os import path
+from django.utils.text import slugify
+import misaka
+import uuid
+
 
 
 class SingleProduct(LoginRequiredMixin, generic.DetailView):
@@ -75,7 +83,7 @@ def VersionProduct(request, pk):
     # redirect to detail_view
     if form.is_valid():
             obj.pk = int(round(time.time() * 1000))
-            form.instance.creator = self.request.user
+            form.instance.creator = request.user
             form.save()
             return HttpResponseRedirect(reverse("products:all"))
 
@@ -138,3 +146,28 @@ class SearchProductsList(LoginRequiredMixin, generic.ListView):
             Q(pk__icontains=query) | Q(name__icontains=query) | Q(type__icontains=query) | Q(description__icontains=query)
         )
         return object_list
+
+
+@permission_required("products.add_product")
+@login_required
+def BulkUploadProduct(request):
+
+    if not path.exists('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/products.csv'):
+        return render(request, "products/product_list.html", {'FileNotFound': True})
+    else:
+        with open('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/products.csv', 'rt') as csv_file:
+            bulk_mgr = BulkCreateManager(chunk_size=20)
+            for row in csv.reader(csv_file):
+                bulk_mgr.add(models.Product(productid=row[0],
+                                          name=row[1],
+                                          slug=slugify(row[1]),
+                                          type=row[2],
+                                          description=row[3],
+                                          description_html = misaka.html(row[1]),
+                                          coverage_limit=row[4],
+                                          price_per_1000_units=row[5],
+                                          creator = request.user
+                                          ))
+            bulk_mgr.done()
+
+    return HttpResponseRedirect(reverse("products:all"))

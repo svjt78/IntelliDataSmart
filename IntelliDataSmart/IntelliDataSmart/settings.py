@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'members',
     'products',
     'agreements',
+    'phonenumber_field',
+    'rest_framework',
 ]
 
 CONTROLCENTER_DASHBOARDS = (

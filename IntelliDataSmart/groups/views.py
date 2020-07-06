@@ -26,6 +26,13 @@ from . import models
 from . import forms
 from members.models import Member
 from groups.forms import GroupForm
+import csv
+from groups.utils import BulkCreateManager
+import os.path
+from os import path
+from django.utils.text import slugify
+import misaka
+import uuid
 
 #class CreateGroup(LoginRequiredMixin, generic.CreateView):
 #    fields = ("name", "description")
@@ -91,6 +98,7 @@ def VersionGroup(request, pk):
         # redirect to detail_view
         if form.is_valid():
                 obj.pk = int(round(time.time() * 1000))
+                form.instance.creator = request.user
                 form.save()
                 return HttpResponseRedirect(reverse("groups:all"))
 
@@ -116,6 +124,7 @@ class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateVie
         if not self.request.user.has_perm('groups.change_group'):
             raise HttpResponseForbidden()
         else:
+            form.instance.creator = self.request.user
             return super().form_valid(form)
 
 
@@ -172,6 +181,29 @@ class ShowAgreementsList(LoginRequiredMixin, generic.ListView):
         object_list = group.group_set.all()
 
         return object_list
+
+
+@permission_required("groups.add_group")
+@login_required
+def BulkUploadGroup(request):
+
+    if not path.exists('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/groups.csv'):
+        return render(request, "groups/group_list.html", {'FileNotFound': True})
+    else:
+        with open('/Users/suvojitdutta/Documents/PYTHON/PROJECTS/Docs/groups.csv', 'rt') as csv_file:
+            bulk_mgr = BulkCreateManager(chunk_size=20)
+            for row in csv.reader(csv_file):
+                bulk_mgr.add(models.Group(groupid = str(uuid.uuid4())[26:36],
+                                          name=row[0],
+                                          slug=slugify(row[0]),
+                                          description=row[1],
+                                          description_html = misaka.html(row[1]),
+                                          purpose=row[2],
+                                          creator = request.user
+                                          ))
+            bulk_mgr.done()
+
+    return HttpResponseRedirect(reverse("groups:all"))
 
 
 class JoinGroup(LoginRequiredMixin, generic.RedirectView):
