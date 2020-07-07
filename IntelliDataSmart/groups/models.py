@@ -2,7 +2,7 @@ from datetime import datetime
 from django.conf import settings
 import uuid
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 from groups.utils import create_new_ref_number
@@ -54,8 +54,8 @@ class Group(models.Model):
 
 
 class GroupMember(models.Model):
-    group = models.ForeignKey(Group, related_name="memberships")
-    user = models.ForeignKey(User,related_name='identity')
+    group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL, related_name="memberships")
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL,related_name='identity')
 
     def __str__(self):
         return self.user.username

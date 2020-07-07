@@ -1,7 +1,7 @@
 from django.conf import settings
 from datetime import datetime
 import uuid
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from groups.models import Group

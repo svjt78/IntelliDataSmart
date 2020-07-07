@@ -13,5 +13,6 @@ urlpatterns = [
     url(r"^(?P<pk>\d+)/create/$",views.CreateMember.as_view(),name='create'),
     url(r"^(?P<pk>\d+)/upload/$",views.BulkUploadMember, name='upload'),
     url(r"^update/(?P<pk>\d+)/$",views.UpdateMember.as_view(),name='update'),
-    url(r"^delete/(?P<pk>\d+)/$",views.DeleteMember.as_view(),name='delete')
+    url(r"^delete/(?P<pk>\d+)/$",views.DeleteMember.as_view(),name='delete'),
+    url(r"^rest/$",views.MemberList, name="rest"),
 ]

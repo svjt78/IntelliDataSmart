@@ -1,6 +1,8 @@
 from django.contrib.auth import login, logout
 from django.contrib import auth
-from django.core.urlresolvers import reverse_lazy
+#from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse
+from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import UpdateView
 from . import models

@@ -13,8 +13,8 @@ from django.contrib.auth.mixins import(
     PermissionRequiredMixin
 )
 
-from django.core.urlresolvers import reverse
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse
+from django.urls import reverse_lazy
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.views import generic
@@ -33,7 +33,11 @@ from django.utils.text import slugify
 import misaka
 import uuid
 
-
+# For Rest rest_framework
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from products.serializers import ProductSerializer
 
 class SingleProduct(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'product_details'
@@ -171,3 +175,21 @@ def BulkUploadProduct(request):
             bulk_mgr.done()
 
     return HttpResponseRedirect(reverse("products:all"))
+
+
+@api_view(['GET', 'POST'])
+def ProductList(request):
+
+    if request.method == 'GET':
+        contacts = Product.objects.all()
+        serializer = ProductSerializer(contacts, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ProductSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
